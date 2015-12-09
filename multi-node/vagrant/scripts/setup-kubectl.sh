@@ -47,7 +47,13 @@ esac
 echo "download https://storage.googleapis.com/kubernetes-release/release/$kube_release/bin/$host_os/$host_arch/kubectl"
 curl -so kubectl https://storage.googleapis.com/kubernetes-release/release/$kube_release/bin/$host_os/$host_arch/kubectl
 chmod +x kubectl
-sudo  mv kubectl /usr/local/bin/kubectl
+
+if uname -r | grep coreos
+then 
+    sudo  mkdir -p /opt/bin; sudo mv kubectl /opt/bin/kubectl
+else
+    sudo  mv kubectl /usr/local/bin/kubectl
+fi
 
 echo "kubectl config set-cluster vagrant --server=https://172.17.4.101:443 --certificate-authority=${PWD}/ssl/ca.pem"
 kubectl config set-cluster vagrant --server=https://172.17.4.101:443 --certificate-authority=${PWD}/ssl/ca.pem
